@@ -19,8 +19,8 @@ public class BaseTests {
 	public WebDriver driver;
 	public VansahNode results;
 	public static final String TestUrl = "https://selenium.vansah.io";
-	public static final String JIRA_ISSUE_KEY = "TEST-7"; //Required
-	public static final String sprintName = "SM Sprint 1"; //Optional
+	public static final String JIRA_ISSUE_KEY = "AS-5"; //Required
+	public static final String sprintName = "AS Sprint 1"; //Optional
 	public static final String releaseName = "Release 24"; //Optional
 	public static final String environment = "UAT";  //Optional
 
@@ -30,8 +30,8 @@ public class BaseTests {
 
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("start-maximized","--remote-allow-origins=*");
-		options.addArguments("--headless"); // Run in headless mode
-		options.addArguments("--disable-gpu"); // Applicable to Windows environments
+		//options.addArguments("--headless"); // Run in headless mode
+		//options.addArguments("--disable-gpu"); // Applicable to Windows environments
 		options.addArguments("--window-size=1920,1080"); // Set window size if needed
 		WebDriverManager.chromedriver().setup();
 
@@ -58,10 +58,10 @@ public class BaseTests {
 
 	@AfterMethod(alwaysRun = true)
 	public void tearDown() throws Exception {
-		if (driver != null) {
-			driver.quit();
+		//if (driver != null) {
+			//driver.quit();
 
-		}
+		//}
 	}
 
 }
