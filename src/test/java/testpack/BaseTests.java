@@ -19,8 +19,9 @@ public class BaseTests {
 	public WebDriver driver;
 	public VansahNode results;
 	public static final String TestUrl = "https://selenium.vansah.io";
-	public static final String JIRA_ISSUE_KEY = "AS-5"; //Required
-	public static final String sprintName = "AS Sprint 1"; //Optional
+	//public static final String JIRA_ISSUE_KEY = "UIPATH-2"; //Required
+	public static final String JIRA_ISSUE_KEY = "AS-7";
+	public static final String sprintName = ""; //Optional
 	public static final String releaseName = "Release 24"; //Optional
 	public static final String environment = "UAT";  //Optional
 
