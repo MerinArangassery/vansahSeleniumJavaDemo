@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the Git repository
-               git https://github.com/MerinArangassery/vansahSeleniumJavaDemo.git
+               git 'https://github.com/MerinArangassery/vansahSeleniumJavaDemo.git'
             }
         }
 
