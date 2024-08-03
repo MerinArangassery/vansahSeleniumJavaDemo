@@ -8,7 +8,7 @@ pipeline {
 
     tools {
         // Specify Maven version
-        maven 'Maven 3.9.8'  // Ensure this version is configured in Jenkins Global Tool Configuration
+        maven 'maven1'  // Ensure this version is configured in Jenkins Global Tool Configuration
     }
 
     stages {
@@ -44,10 +44,7 @@ pipeline {
     }
 
     post {
-        always {
-            // Actions that always run after the pipeline
-            cleanWs()
-        }
+      
         success {
             // Actions that run only if the build is successful
             echo 'Build succeeded!'
