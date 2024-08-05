@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         // Set environment variables if needed
-         PATH = "${env.PATH};C:\\Users\\merin\\AppData\\Roaming\\npm"
+        // PATH = "${env.PATH};C:\\Users\\merin\\AppData\\Roaming\\npm"
+        VANS_H_PATH = "C:\\Users\\merin\\AppData\\Roaming\\npm"
     }
 
     tools {
@@ -49,7 +50,7 @@ pipeline {
                     // Ensure the vansah-connect tool is available
                     if (fileExists(VANS_H_PATH)) {
                         // Upload test results to vansah-connect
-                        sh "${VANS_H_PATH} -f target/surefire-reports/testng-results.xml"
+                        bat "${VANS_H_PATH} -f target/surefire-reports/testng-results.xml"
                     } else {
                         error "vansah-connect tool not found at ${VANS_H_PATH}"
                     }
