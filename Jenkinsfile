@@ -21,25 +21,17 @@ pipeline {
             }
         }
 
-       stage('Build') {
+       stage('Build and Test') {
             steps {
                 script {
                     try {
+                        // Run Maven build
                         bat 'mvn clean install'
-                    } catch (Exception e) {
-                        currentBuild.result = 'FAILURE'
-                        throw e
-                    }
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                script {
-                    try {
+                        
+                        // Run Maven tests if the build succeeds
                         bat 'mvn test'
                     } catch (Exception e) {
+                        echo "Build or test failed: ${e.getMessage()}"
                         currentBuild.result = 'FAILURE'
                         throw e
                     }
