@@ -47,6 +47,7 @@ pipeline {
                 // Check for the existence of the TestNG results file
                 bat 'dir /s /b target\\surefire-reports'
                 def testResultsPath = '\\target\\surefire-reports\\testng-results.xml'
+                echo "Checking for test results at: ${testResultsPath}"
                 
                 if (fileExists(testResultsPath)) {
                     // Archive the TestNG results
