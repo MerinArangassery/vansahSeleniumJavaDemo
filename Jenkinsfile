@@ -47,13 +47,13 @@ pipeline {
             echo 'Build failed!'
         }
         always {
-            
+             script {
                 // Archive the test results
                 junit '**/target/test-classes/testng-results.xml'
                 // Or archive other build artifacts
                 archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
             
-            script {
+           
                 // Use the correct path to testng-reports.xml based on your project structure
                 def reportPath = 'target/surefire-reports/testng-results.xml'
 
