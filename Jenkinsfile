@@ -55,8 +55,11 @@ pipeline {
         }
         always {
             script {
-                // Run vansah-connect command
-                bat 'vansah-connect -f testng-reports.xml'  // Use 'bat' instead of 'sh' if running on Windows
+                // Use the correct path to testng-reports.xml based on your project structure
+                def reportPath = 'target/surefire-reports/testng-results.xml'
+
+                // Run vansah-connect command to upload test results
+                bat "vansah-connect -f ${reportPath}" 
             }
         }
     }
