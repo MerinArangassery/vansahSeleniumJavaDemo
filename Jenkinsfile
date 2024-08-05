@@ -10,6 +10,8 @@ pipeline {
     tools {
         // Specify Maven version
         maven 'maven1'  // Ensure this version is configured in Jenkins Global Tool Configuration
+        nodejs 'Node 1'
+        
     }
 
     stages {
@@ -44,26 +46,7 @@ pipeline {
     post {
         always {
             script {
-                // Check for the existence of the TestNG results file
-               // bat 'dir /s /b target\\surefire-reports'
-                def testResultsPath = '\\target\\surefire-reports\\testng-results.xml'
-                echo "Checking for test results at: ${testResultsPath}"
-                
-                if (fileExists(testResultsPath)) {
-                    // Archive the TestNG results
-                    junit testResultsPath
-
-                    // Ensure the vansah-connect tool is available
-                    if (fileExists(VANS_H_PATH)) {
-                        // Upload test results to vansah-connect
-                        bat "${VANS_H_PATH} -f target/surefire-reports/testng-results.xml"
-                    } else {
-                        error "vansah-connect tool not found at ${VANS_H_PATH}"
-                    }
-                } else {
-                    echo "TestNG results file not found: ${testResultsPath}"
-                }
-            }
+                bat "${VANS_H_PATH} -f target/surefire-reports/testng-results.xml"
         }
 }
 }
