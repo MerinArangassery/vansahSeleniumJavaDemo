@@ -21,21 +21,33 @@ pipeline {
             }
         }
 
-        stage('Build') {
+       stage('Build') {
             steps {
-                // Run Maven build
-                bat 'mvn clean install'  // Use 'bat' instead of 'sh' if running on Windows
+                script {
+                    try {
+                        bat 'mvn clean install'
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        throw e
+                    }
+                }
             }
         }
 
         stage('Test') {
             steps {
-                // Run Maven tests
-                bat 'mvn test'  // Use 'bat' instead of 'sh' if running on Windows
+                script {
+                    try {
+                        bat 'mvn test'
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        throw e
+                    }
+                }
             }
         }
-
     }
+
 
     post {
         always {
