@@ -37,29 +37,25 @@ pipeline {
     }
 
     post {
-      
-        success {
-            // Actions that run only if the build is successful
-            echo 'Build succeeded!'
-        }
-        failure {
-            // Actions that run only if the build fails
-            echo 'Build failed!'
-        }
         always {
-             script {
-                // Archive the test results
-                junit '**/target/test-classes/testng-results.xml'
-                // Or archive other build artifacts
-                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
-            
-           
-                // Use the correct path to testng-reports.xml based on your project structure
-                def reportPath = 'target/surefire-reports/testng-results.xml'
+            script {
+                // Check for the existence of the TestNG results file
+                def testResultsPath = '**/target/surefire-reports/testng-results.xml'
+                
+                if (fileExists(testResultsPath)) {
+                    // Archive the TestNG results
+                    junit testResultsPath
 
-                // Run vansah-connect command to upload test results
-                bat "vansah-connect -f ${reportPath}" 
+                    // Ensure the vansah-connect tool is available
+                    if (fileExists(VANS_H_PATH)) {
+                        // Upload test results to vansah-connect
+                        sh "${VANS_H_PATH} -f target/surefire-reports/testng-results.xml"
+                    } else {
+                        error "vansah-connect tool not found at ${VANS_H_PATH}"
+                    }
+                } else {
+                    echo "TestNG results file not found: ${testResultsPath}"
+                }
             }
         }
-    }
 }
