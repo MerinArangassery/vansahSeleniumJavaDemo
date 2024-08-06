@@ -9,7 +9,7 @@ import pages.HeaderSection;
 public class VansahIOTests extends BaseTests{
 	
 	@Test(groups = { "regression" },attributes = {
-		    //  @CustomAttribute(name = "Case Key", values = "UIPATH-C4"),
+		     //@CustomAttribute(name = "Case Key", values = "UIPATH-C4"),
 			 @CustomAttribute(name = "Case Key", values = "AS-C15"),
 		      @CustomAttribute(name = "Tested Issue", values = JIRA_ISSUE_KEY),
 		      @CustomAttribute(name = "Tested Sprint", values = sprintName ),
@@ -24,7 +24,7 @@ public class VansahIOTests extends BaseTests{
 	}
 	
 	@Test(groups = { "regression" },attributes = {
-		     // @CustomAttribute(name = "Case Key", values = "UIPATH-C6"), 
+		    // @CustomAttribute(name = "Case Key", values = "UIPATH-C6"), 
 			@CustomAttribute(name = "Case Key", values = "AS-C16"),
 		      @CustomAttribute(name = "Tested Issue", values = JIRA_ISSUE_KEY),
 		      
