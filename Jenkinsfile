@@ -1,16 +1,10 @@
 pipeline {
     agent any  // Use any available agent
-
-    environment {
-        // Set environment variables if needed
-        // PATH = "${env.PATH};C:\\Users\\merin\\AppData\\Roaming\\npm"
-        VANS_H_PATH = "C:\\Users\\merin\\AppData\\Roaming\\npm"
-    }
-
+     
     tools {
         // Specify Maven version
         maven 'maven1'  // Ensure this version is configured in Jenkins Global Tool Configuration
-        nodejs 'Node 1'
+        nodejs 'Node1'
         
     }
 
@@ -18,7 +12,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the Git repository
-              // git 'https://github.com/MerinArangassery/vansahSeleniumJavaDemo.git'
                 git url: 'https://github.com/MerinArangassery/vansahSeleniumJavaDemo.git', branch: 'jenkins-job'
             }
         }
@@ -46,7 +39,20 @@ pipeline {
     post {
         always {
             script {
-                bat "${VANS_H_PATH} -f target/surefire-reports/testng-results.xml"
+                
+                //installing vansah-connect npm package
+                    bat 'npm i -g @vansah/vansah-connect'
+                
+                //script to fetch Vansah API Token from credentials securely
+                withCredentials([string(credentialsId: 'dae88169-ae46-4171-bc63-4565808fb8e4', variable: 'MY_API_TOKEN')]) {
+                    bat 'vansah-connect -c %MY_API_TOKEN%'
+                    //uploading results to vansah
+                     bat 'vansah-connect -f ./target/surefire-reports/testng-results.xml'
+                }
+
+                
+            }
         }
-}
+    }
+
 }
