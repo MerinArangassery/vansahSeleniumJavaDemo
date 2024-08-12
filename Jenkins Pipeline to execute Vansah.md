@@ -2,7 +2,9 @@
 
 ## Overview
 
-This Jenkins pipeline is designed to build and test a Maven-based Java project and integrate with Vansah Connect for test result management. It demonstrates a complete CI/CD workflow using Jenkins, Maven, NodeJS, TestNG and the Vansah Connect CLI.ent app, and handle post-build actions. It performs the following:
+This Jenkins pipeline is designed to build and test a Maven-based Java project and integrate with Vansah Connect for test result management. It demonstrates a complete CI/CD workflow involving Jenkins, Maven, NodeJS, TestNG, Vansah Connect CLI and Vansah Test Management app.  
+ 
+ The following stages are performed:
 
 1. **Builds and tests the Maven project**.
 2. **Installs the [@vansah/vansah-connect](https://www.npmjs.com/package/@vansah/vansah-connect) npm package**.
@@ -13,7 +15,8 @@ This Jenkins pipeline is designed to build and test a Maven-based Java project a
 
 ### 1. Vansah Installed 
 - Ensure the Vansah Test Mangement app is installed in your JIRA workspace.
-- Set up your project and note the **IssueKey / FolderID** and  **two corresponding TestcaseKeys**
+- Set up your JIRA project and with an Issue and two testcases. Note the **IssueKey / FolderID** and  **two corresponding TestcaseKeys**
+  ![Vansah_project](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/Jira_vansahProject.png)
 ### 2. Jenkins Setup
    - **[Jenkins](https://www.jenkins.io/doc/pipeline/tour/getting-started/)** must be up and running
    - Add the following plugins to your Jenkins by **Jenkins Dashboard > Manage Jenkins > Plugins > Available Plugins**
@@ -25,24 +28,32 @@ This Jenkins pipeline is designed to build and test a Maven-based Java project a
 ### 3. **Repository Setup**:
 The `Vansah Automation Demo` project contains two testcases (one **positive** and one **negative**) that verifies the Test website https://selenium.vansah.io.
    - Clone [Vansah Automation Demo](https://github.com/testpointcorp/vansahSeleniumJavaDemo/tree/jenkins-job) to your repository.
-   - Update the `@CustomAttributes` in [VansahIOTests.java]() and [BaseTests.java](https://github.com/testpointcorp/vansahSeleniumJavaDemo/blob/jenkins-job/src/test/java/testpack/BaseTests.java)  according to your Vansah board.
-
+   - Update the `@CustomAttributes` in [VansahIOTests.java](https://github.com/testpointcorp/vansahSeleniumJavaDemo/blob/jenkins-job/src/test/java/testpack/VansahIOTests.java) and [BaseTests.java](https://github.com/testpointcorp/vansahSeleniumJavaDemo/blob/jenkins-job/src/test/java/testpack/BaseTests.java)  according to your Vansah board.
+     ![Vansah_io](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/VasahIoTestsAS.png)
+     ![BaseTests](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/BaseTestsAS.png)
 ## Jenkins Configuration
 
 ### Jenkins Plugins
 
-Ensure the following Jenkins Tools are installed:
-- **Maven Installations**: For building Maven projects. Add a name (eg: maven1)
-- **NodeJS Installations**: For managing Node.js and npm installations. Add a name (eg: Node1)
+Ensure the following Jenkins Tools are installed in **Jenkins Dashboard > Manage Jenkins > Tools** :
+- **Maven Installations**: For building Maven projects. Add a name (E.g: maven1)
+  ![maven_installations](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/Tools_Maven.png)
+- **NodeJS Installations**: For managing Node.js and npm installations. Add a name (E.g.: Node1)
+  ![nodeJS_installation](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/Tools_nodejs.png)
+- **Git Installations**
+![Git_Installation](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/Tools_git.png)
 
 ### Credentials
 
  **Add Vansah API Token** as Credentials.
  
  [Click to know how to get Vansah API Token](https://community.vansah.com/posts/how-to-generate-a-vansah-api-token-from-jira)
-   - Go to **Jenkins Dashboard > Manage Jenkins > Manage Credentials**.
-   - Add a new `Secret text`  credential with your Vansah API token.
+   - Go to **Jenkins Dashboard > Manage Jenkins > Manage Credentials > System > Global credentials (unrestricted) > Add Credentials**.
+   - Add a new `Secret text`  credential with your Vansah API token and
+     
+     provide an **ID** name (E.g. 'VANSAH_API_TOKEN').
    - Use the ID for this credential in the pipeline script.
+     ![Add_credential](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/Add_credentials.png)
    
 ## How to Use
 
@@ -50,6 +61,7 @@ Ensure the following Jenkins Tools are installed:
    - Go to the Jenkins dashboard.
    - Click on **New Item**.
    -  Provide a name and choose **Pipeline project**.
+     ![NewJenkinsItem](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/New_JenkinsItems.png)
 
 2. **Configure Pipeline**:
    - In the pipeline configuration, choose **Pipeline script** and paste the provided pipeline script into the script area. 
@@ -117,7 +129,7 @@ pipeline {
 
 3. **Save and Build**:
    - Save the configuration and build the pipeline to execute the script.
-
+![PipelineScript](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/PipelineScript.png)
 
 ## Post-Build Actions Breakdown
 
@@ -140,10 +152,10 @@ pipeline {
 
 `bat 'vansah-connect -f ./target/surefire-reports/testng-results.xml'`
 - **Description**: Uploads the test results as specified **testng-results.xml** file generated during the build, to Vansah. Ensure the file path matches the location of your **testng-results.xml**.
-
+![Vansah_UploadSuccess](https://github.com/testpointcorp/connect-images/blob/main/JenkinsPipelineForVansahAutomationDemo/Vansah_upload_success.png)
 ## Notes
 
-- Due to the negative testcase the Jenkins job will **fail** but it uploads the results as one PASSED and one FAILED. 
+- Due to the negative test case, the Jenkins job will **fail**, but it will upload the results as ‘PASSED’ for one and ‘FAILED’ for the other. 
 - Ensure that the file path to the **testng-results.xml** in `vansah-connect -f` command is correct and matches the actual location of your test results.
 - Double-check that the `VANSAH_API_TOKEN` credential ID matches the ID used in the Jenkins pipeline script.
 
